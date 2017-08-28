@@ -24,6 +24,10 @@
 #include <linux/wakeup_reason.h>
 #include "power.h"
 
+#ifdef CONFIG_BOEFFLA_WL_BLOCKER
+#include "boeffla_wl_blocker.h"
+#endif
+
 /*
  * If set, the suspend/hibernate code will abort transitions to a sleep state
  * if wakeup events are registered during or immediately before the transition.
@@ -61,6 +65,7 @@ static unsigned int saved_count;
 static DEFINE_SPINLOCK(events_lock);
 
 static void pm_wakeup_timer_fn(unsigned long data);
+static void wakeup_source_deactivate(struct wakeup_source *ws);
 
 static LIST_HEAD(wakeup_sources);
 
@@ -553,6 +558,18 @@ static void wakeup_source_activate(struct wakeup_source *ws)
 	trace_wakeup_source_activate(ws->name, cec);
 }
 
+static inline int wakelock_blocked(struct wakeup_source *ws)
+{
+	int ret = 0;
+
+#ifdef CONFIG_BOEFFLA_WL_BLOCKER
+	ret = __wakelock_blocked(ws);
+	if (ret && ws->active)
+		wakeup_source_deactivate(ws);
+#endif
+	return ret;
+}
+
 /**
  * wakeup_source_report_event - Report wakeup event using the given source.
  * @ws: Wakeup source to report the event for.
@@ -560,6 +577,9 @@ static void wakeup_source_activate(struct wakeup_source *ws)
  */
 static void wakeup_source_report_event(struct wakeup_source *ws, bool hard)
 {
+	if (wakelock_blocked(ws))
+		return;
+
 	ws->event_count++;
 	/* This is racy, but the counter is approximate anyway. */
 	if (events_check_enabled)
