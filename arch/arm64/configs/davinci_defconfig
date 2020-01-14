@@ -79,6 +79,7 @@ CONFIG_CMDLINE_EXTEND=y
 CONFIG_BUILD_ARM64_APPENDED_DTB_IMAGE=y
 CONFIG_KRYO_PMU_WORKAROUND=y
 CONFIG_BUILD_ARM64_DT_OVERLAY=y
+CONFIG_BUILD_ARM64_DTB_LIST="dts/qcom/msm8916-mtp.dtb dts/qcom/sa6155.dtb dts/qcom/sm6150.dtb dts/qcom/msm8996-mtp.dtb dts/qcom/msm8992-bullhead-rev-101.dtb dts/qcom/sdmmagpie.dtb dts/qcom/msm8994-angler-rev-101.dtb dts/qcom/apq8096-db820c.dtb dts/qcom/apq8016-sbc.dtb dts/qcom/ipq8074-hk01.dtb dts/qcom/sdmmagpiep.dtb dts/qcom/sm6150p.dtb dts/qcom/sa6155p.dtb"
 # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
 CONFIG_COMPAT=y
 CONFIG_PM_AUTOSLEEP=y

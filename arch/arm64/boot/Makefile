@@ -26,7 +26,12 @@ DTB_LIST := $(addsuffix .dtb,$(DTB_NAMES))
 else
 DTB_LIST := $(dtb-y)
 endif
+
+ifneq ($(CONFIG_BUILD_ARM64_DTB_LIST),"")
+DTB_OBJS := $(addprefix $(obj)/,$(subst $\",,$(CONFIG_BUILD_ARM64_DTB_LIST)))
+else
 DTB_OBJS := $(shell find $(obj)/dts/ -name \*.dtb)
+endif
 
 # Add RTIC DTB to the DTB list if RTIC MPGen is enabled
 ifdef RTIC_MPGEN
