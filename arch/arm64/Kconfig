@@ -1394,6 +1394,20 @@ config BUILD_ARM64_DTB_LIST
 	  strict order. It is required for some bootloaders.
 
 	  If unsure, stick with default value.
+
+config BUILD_ARM64_DT_OMIT_LPHANDLE
+	bool "Omit linux,phandle property when compiling dtb"
+	default n
+	help
+	  Some bootloaders struggle from strange issues when
+	  both phandle and linux,phandle properties exist in the
+	  same node.
+
+	  Enable this option if your bootloader is affected.
+	  Note that this will break backwards compatibility with
+	  bootloaders which expect linux,phandle properties set.
+
+	  If unsure, stick with default value.
 endmenu
 
 menu "Userspace binary formats"

@@ -160,9 +160,16 @@ endif
 
 KBUILD_DTBS	:= dtbs
 
+DTC_FLAGS :=
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
-export DTC_FLAGS := -@
+DTC_FLAGS += -@
 endif
+
+ifeq ($(CONFIG_BUILD_ARM64_DT_OMIT_LPHANDLE),y)
+DTC_FLAGS += -H epapr
+endif
+
+export DTC_FLAGS
 
 all:	$(KBUILD_DTBS) $(KBUILD_TARGET)
 
