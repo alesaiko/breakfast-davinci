@@ -4,6 +4,7 @@
 # Device configuration
 IMAGE			?= Image.gz-dtb
 DEFCONFIG		?= davinci_defconfig
+ORIGINAL_KCONFIG	?= vendor/davinci_user_defconfig
 
 # Toolchain configuration
 TOOLCHAIN_HOST		:= https://github.com/alesaiko

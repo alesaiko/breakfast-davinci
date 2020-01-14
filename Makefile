@@ -352,6 +352,10 @@ hdr-arch  := $(SRCARCH)
 KCONFIG_CONFIG	?= .config
 export KCONFIG_CONFIG
 
+# Original kernel configuration for Android devices
+ORIGINAL_KCONFIG ?= .config
+export ORIGINAL_KCONFIG
+
 # SHELL used by kbuild
 CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
