@@ -2983,6 +2983,54 @@ static const struct file_operations proc_hung_task_detection_enabled_operations 
 };
 #endif
 
+static ssize_t proc_sched_task_top_app_read(struct file *file, char __user *buf,
+					    size_t count, loff_t *ppos)
+{
+	struct task_struct *task;
+	char buffer[PROC_NUMBUF];
+	unsigned int top_app;
+	ssize_t len;
+
+	task = get_proc_task(file_inode(file));
+	if (!task)
+		return -ESRCH;
+
+	top_app = task->top_app;
+	put_task_struct(task);
+
+	len = snprintf(buffer, sizeof(buffer), "%u\n", top_app);
+
+	return simple_read_from_buffer(buf, count, ppos, buffer, len);
+}
+
+static ssize_t
+proc_sched_task_top_app_write(struct file *file, const char __user *buf,
+			      size_t count, loff_t *ppos)
+{
+	struct task_struct *task;
+	unsigned int top_app;
+	int ret;
+
+	ret = kstrtouint_from_user(buf, count, 0, &top_app);
+	if (ret < 0)
+		return ret;
+
+	task = get_proc_task(file_inode(file));
+	if (!task)
+		return -ESRCH;
+
+	task->top_app = !!top_app;
+	put_task_struct(task);
+
+	return count;
+}
+
+static const struct file_operations proc_task_top_app_operations = {
+	.read		= proc_sched_task_top_app_read,
+	.write		= proc_sched_task_top_app_write,
+	.llseek		= generic_file_llseek,
+};
+
 #ifdef CONFIG_USER_NS
 static int proc_id_map_open(struct inode *inode, struct file *file,
 	const struct seq_operations *seq_ops)
@@ -3161,6 +3209,7 @@ static const struct pid_entry tgid_base_stuff[] = {
 #ifdef CONFIG_SCHED_WALT
 	REG("sched_init_task_load", 00644, proc_pid_sched_init_task_load_operations),
 	REG("sched_group_id", 00666, proc_pid_sched_group_id_operations),
+	REG("top_app",  0666, proc_task_top_app_operations),
 #endif
 #ifdef CONFIG_SCHED_DEBUG
 	REG("sched",      S_IRUGO|S_IWUSR, proc_pid_sched_operations),

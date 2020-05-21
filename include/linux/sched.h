@@ -791,6 +791,9 @@ struct task_struct {
 	struct list_head grp_list;
 	u64 cpu_cycles;
 	bool misfit;
+
+	/* Top app tasks get boosted if specified */
+	unsigned int			top_app;
 #endif
 
 #ifdef CONFIG_CGROUP_SCHED
