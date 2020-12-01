@@ -33,7 +33,7 @@ extern "C" {
 #define			L_MAX				2147483647		/*0x7FFFFFFF */
 #define			L_MIN				(-2147483647-1)	/*-0x80000000*/
 
-#define CONFIG_GOODIX_DEBUG
+#define CONFIG_GOODIX_DEBUG     0
 #ifdef CONFIG_GOODIX_DEBUG
 #define board_print_debug(fmt, arg...)		pr_info("[GTP-DBG][%s:%d]"fmt"\n", __func__, __LINE__, ##arg)
 #else
